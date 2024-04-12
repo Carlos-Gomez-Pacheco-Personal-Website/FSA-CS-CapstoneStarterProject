@@ -10,6 +10,7 @@ const JWT = process.env.JWT || "shhh";
 const createTables = async () => {
   const SQL = `
     DROP TABLE IF EXISTS order_items;
+    DROP TABLE IF EXISTS reviews;
     DROP TABLE IF EXISTS favorites;
     DROP TABLE IF EXISTS cart;
     DROP TABLE IF EXISTS orders;
@@ -63,6 +64,14 @@ const createTables = async () => {
       order_id UUID REFERENCES orders(id) NOT NULL,
       product_id UUID REFERENCES products(id) NOT NULL,
       quantity INTEGER NOT NULL
+    );
+
+    CREATE TABLE reviews(
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      user_id UUID REFERENCES users(id) NOT NULL,
+      product_id UUID REFERENCES products(id) NOT NULL,
+      content TEXT NOT NULL,
+      rating INTEGER NOT NULL
     );
   `;
   await client.query(SQL);
@@ -175,6 +184,14 @@ const fetchProducts = async () => {
   return response.rows;
 };
 
+const fetchSingleProduct = async (productId) => {
+  const SQL = `
+  SELECT * FROM products WHERE id = $1
+  `;
+  const response = await client.query(SQL, [productId]);
+  return response.rows[0];
+};
+
 const updateProduct = async ({
   id,
   name,
@@ -249,6 +266,7 @@ const fetchCategories = async () => {
 
 // Cart
 const addToCart = async ({ user_id, product_id, quantity }) => {
+  console.log("addToCart", quantity);
   const SQL = `
     INSERT INTO cart(id, user_id, product_id, quantity) VALUES($1, $2, $3, $4) RETURNING *
   `;
@@ -258,6 +276,7 @@ const addToCart = async ({ user_id, product_id, quantity }) => {
     product_id,
     quantity,
   ]);
+  console.log(response.rows);
   return response.rows[0];
 };
 
@@ -289,34 +308,28 @@ const createCartItem = async ({ user_id, product_id, quantity }) => {
   return response.rows[0];
 };
 
-const updateCart = async ({ id, user_id, product_id, quantity }) => {
+const updateCart = async ({ user_id, product_id, quantity }) => {
   const SQL = `
     UPDATE cart
-    SET user_id = $2, product_id = $3, quantity = $4
-    WHERE id = $1
+    SET quantity = $3
+    WHERE user_id = $1 AND product_id = $2
     RETURNING *
   `;
-  const response = await client.query(SQL, [id, user_id, product_id, quantity]);
+  const response = await client.query(SQL, [user_id, product_id, quantity]);
   return response.rows[0];
 };
-// INSERT INTO cartItems (cart_id, product_id, quantity) VALUES ($1, $2, $3) ON CONFLICT (cart_id, product_id) DO UPDATE SET quantity = $3 RETURNING *
 
 const fetchCart = async (user_id) => {
   const SQL = `
-    SELECT c.*, p.* 
+    SELECT c.*, p.name , p.price , c.quantity
     FROM cart c
     JOIN products p ON p.id = c.product_id
     WHERE c.user_id = $1
   `;
   const response = await client.query(SQL, [user_id]);
+  console.log(response.rows);
   return response.rows.map((row) => ({
     ...row,
-    product: {
-      id: row.product_id,
-      name: row.name,
-      price: row.price,
-      // include other product properties here
-    },
   }));
 };
 
@@ -369,6 +382,30 @@ const fetchOrderTotal = async (order_id) => {
   return response.rows[0].total;
 };
 
+// Review Product
+
+const getReviews = async (productId) => {
+  const SQL = `SELECT * FROM reviews WHERE product_id = $1`;
+  const reviews = await client.query(SQL, [productId]);
+  return reviews.rows;
+};
+
+const createReview = async (productId, { content, rating }) => {
+  const SQL = `INSERT INTO reviews (user_id, product_id, content, rating) VALUES ($1, $2, $3, $4) RETURNING *`;
+  const review = await client.query(SQL, [
+    req.user.id,
+    productId,
+    content,
+    rating,
+  ]);
+  return review.rows[0];
+};
+
+const deleteReview = async (reviewId) => {
+  const SQL = `DELETE FROM reviews WHERE id = $1`;
+  await client.query(SQL, [reviewId]);
+};
+
 module.exports = {
   client,
   createTables,
@@ -380,6 +417,7 @@ module.exports = {
   removeFromCart,
   checkout,
   updateProduct,
+  fetchSingleProduct,
   destroyProduct,
   updateCart,
   isAdmin2,
@@ -396,4 +434,7 @@ module.exports = {
   destroyFavorite,
   authenticate,
   findUserWithToken,
+  getReviews,
+  createReview,
+  deleteReview,
 };

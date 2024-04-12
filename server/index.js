@@ -9,6 +9,7 @@ const {
   removeFromCart,
   checkout,
   updateProduct,
+  fetchSingleProduct,
   destroyProduct,
   updateCart,
   isAdmin2,
@@ -25,6 +26,9 @@ const {
   destroyFavorite,
   authenticate,
   findUserWithToken,
+  getReviews,
+  createReview,
+  deleteReview,
 } = require("./db");
 
 const express = require("express");
@@ -129,6 +133,14 @@ app.get("/api/products", async (req, res, next) => {
   }
 });
 
+app.get("/api/products/:id", async (req, res, next) => {
+  try {
+    res.send(await fetchSingleProduct());
+  } catch (ex) {
+    next(ex);
+  }
+});
+
 app.post("/api/admin/products", async (req, res, next) => {
   try {
     res.send(await createProduct(req.body));
@@ -156,17 +168,20 @@ app.delete("/api/admin/products/:id", async (req, res, next) => {
 
 // For Cart
 
-app.put("/api/cart/:id", async (req, res, next) => {
-  try {
-    res.send(await updateCart({ id: req.params.id, ...req.body }));
-  } catch (ex) {
-    next(ex);
-  }
-});
+// app.put("/api/cart/:id", async (req, res, next) => {
+//   try {
+//     res.send(await updateCart({ id: req.params.id, ...req.body }));
+//   } catch (ex) {
+//     next(ex);
+//   }
+// });
 
-app.delete("/api/cart/:id", async (req, res, next) => {
+app.delete("/api/users/:id/product/:productid", async (req, res, next) => {
   try {
-    await removeFromCart(req.params.id);
+    await removeFromCart({
+      user_id: req.params.id,
+      product_id: req.params.productid,
+    });
     res.status(200).json({ message: "Item removed from cart" });
   } catch (ex) {
     next(ex);
@@ -191,14 +206,6 @@ app.post("/api/cart", async (req, res, next) => {
     next(ex);
   }
 });
-
-// app.get("/api/cart", async (req, res, next) => {
-//   try {
-//     res.send(await fetchCart(req.body.user_id));
-//   } catch (ex) {
-//     next(ex);
-//   }
-// });
 app.get("/api/users/:id/cart", async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -217,10 +224,22 @@ app.get("/api/cart/total", async (req, res, next) => {
   }
 });
 app.post("/api/users/:id/cart", async (req, res, next) => {
+  console.log(req.body.product_id);
+  console.log(req.body.quantity);
   try {
     const { id: user_id } = req.params; // rename id to user_id for clarity
     const { product_id, quantity } = req.body;
     const item = await addToCart({ user_id, product_id, quantity }); // pass an object here
+    res.send(item);
+  } catch (ex) {
+    next(ex);
+  }
+});
+app.put("/api/users/:id/cart", async (req, res, next) => {
+  try {
+    const { id: user_id } = req.params; // rename id to user_id for clarity
+    const { product_id, quantity } = req.body; // pass an object here
+    const item = await updateCart({ user_id, product_id, quantity });
     res.send(item);
   } catch (ex) {
     next(ex);
@@ -262,14 +281,6 @@ const isAdmin = async (req, res, next) => {
 app.use("/api/admin", isAdmin);
 
 // For Orders
-
-// app.get("/api/orders", async (req, res, next) => {
-//   try {
-//     res.send(await fetchOrders(req.body.user_id));
-//   } catch (ex) {
-//     next(ex);
-//   }
-// });
 app.get("/api/users/:id/orders", async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -291,6 +302,29 @@ app.get("/api/orders/:id/items", async (req, res, next) => {
 app.get("/api/orders/:id/total", async (req, res, next) => {
   try {
     res.send({ total: await fetchOrderTotal(req.params.id) });
+  } catch (ex) {
+    next(ex);
+  }
+});
+// Reviews Products
+app.get("/api/products/:id/reviews", async (req, res, next) => {
+  try {
+    res.send(await getReviews(req.params.id));
+  } catch (ex) {
+    next(ex);
+  }
+});
+app.post("/api/products/:id/reviews", async (req, res, next) => {
+  try {
+    res.send(await createReview(req.params.id, req.body));
+  } catch (ex) {
+    next(ex);
+  }
+});
+app.delete("/api/products/:id/reviews/:reviewId", async (req, res, next) => {
+  try {
+    await deleteReview(req.params.reviewId);
+    res.sendStatus(204);
   } catch (ex) {
     next(ex);
   }
