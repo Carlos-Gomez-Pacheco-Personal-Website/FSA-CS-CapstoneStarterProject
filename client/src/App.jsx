@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import NavigationBar from "./components/NavigationBar";
 import Login from "./components/Login";
+import Profile from "./components/Profile";
 import ProductList from "./components/ProductList";
 import ProductDetails from "./components/ProductDetails";
 import Cart from "./components/Cart";
@@ -260,6 +261,9 @@ function App() {
         <Switch>
           <Route path="/login">
             {auth.id ? <Redirect to="/" /> : <Login setAuth={setAuth} />}
+          </Route>
+          <Route path="/profile">
+            {!auth.id ? <Redirect to="/login" /> : <Profile user={auth} />}
           </Route>
           <Route path="/cart">
             {!auth.id ? (
