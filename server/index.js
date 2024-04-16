@@ -135,7 +135,8 @@ app.get("/api/products", async (req, res, next) => {
 
 app.get("/api/products/:id", async (req, res, next) => {
   try {
-    res.send(await fetchSingleProduct());
+    console.log(req.params.id);
+    res.send(await fetchSingleProduct(req.params.id));
   } catch (ex) {
     next(ex);
   }

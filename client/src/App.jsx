@@ -308,6 +308,9 @@ function App() {
               auth={auth}
             />
           </Route>
+          <Route path="*">
+            <Redirect to="/" />
+          </Route>
         </Switch>
       </div>
     </BrowserRouter>

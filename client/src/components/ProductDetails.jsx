@@ -9,8 +9,8 @@ const ProductDetails = ({
   fetchProduct,
 }) => {
   const { id } = useParams();
-  const [product, setProduct] = useState(null);
-  const [review, setReview] = useState(null);
+  const [product, setProduct] = useState({});
+  const [review, setReview] = useState("");
 
   useEffect(() => {
     const getProduct = async () => {
