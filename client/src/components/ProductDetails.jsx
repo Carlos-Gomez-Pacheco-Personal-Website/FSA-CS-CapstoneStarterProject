@@ -13,11 +13,13 @@ const ProductDetails = ({
   const [product, setProduct] = useState({});
   const [review, setReview] = useState("");
   const [rating, setRating] = useState(5);
-  // const [reviews, setReviews] = useState();
+  const [reviews, setReviews] = useState([]);
 
-  // const getReviews = async () => {
-  //   console.log("getReviews");
-  // }
+  const getReviews = async () => {
+    const response = await fetch(`/api/products/${id}/reviews`);
+    const reviews = await response.json();
+    setReviews(reviews);
+  };
 
   useEffect(() => {
     const getProduct = async () => {
@@ -26,6 +28,7 @@ const ProductDetails = ({
     };
 
     getProduct();
+    getReviews();
   }, [id, fetchProduct]);
 
   const submitReview = async () => {
@@ -83,6 +86,16 @@ const ProductDetails = ({
         onChange={(e) => setRating(e.target.value)}
       />
       <button onClick={submitReview}>Submit Review</button>
+      <div>
+        <h2>Reviews</h2>
+        {reviews.map((review) => (
+          <div key={review.id}>
+            <p>User ID: {review.user_id}</p>
+            <p>Content: {review.content}</p>
+            <p>Rating: {review.rating}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
