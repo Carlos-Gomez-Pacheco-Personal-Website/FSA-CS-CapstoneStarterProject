@@ -128,7 +128,9 @@ const ProductList = ({
                     </button>
                   )}
 
-                  <Link to={`/product/${product.id}`}>View Details</Link>
+                  <Link to={`/product/${product.id}`}>
+                    <button>View Details</button>
+                  </Link>
                 </div>
               )}
             </li>

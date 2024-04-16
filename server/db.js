@@ -22,6 +22,8 @@ const createTables = async () => {
       id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
       username VARCHAR(20) UNIQUE NOT NULL,
       password VARCHAR(255) NOT NULL,
+      email VARCHAR(255) UNIQUE NOT NULL,
+      phone VARCHAR(20),
       is_admin BOOLEAN DEFAULT false
     );
 
@@ -78,16 +80,23 @@ const createTables = async () => {
 };
 
 //User
-const createUser = async ({ username, password }) => {
+const createUser = async ({ username, password, email, phone }) => {
   const SQL = `
-    INSERT INTO users(id, username, password) VALUES($1, $2, $3) RETURNING *
+    INSERT INTO users(id, username, password, email, phone) VALUES($1, $2, $3, $4, $5) RETURNING *
   `;
   const response = await client.query(SQL, [
     uuid.v4(),
     username,
     await bcrypt.hash(password, 5),
+    email,
+    phone,
   ]);
-  return { id: response.rows[0].id, username: response.rows[0].username };
+  return {
+    id: response.rows[0].id,
+    username: response.rows[0].username,
+    email: response.rows[0].email,
+    phone: response.rows[0].phone,
+  };
 };
 
 const authenticate = async ({ username, password }) => {

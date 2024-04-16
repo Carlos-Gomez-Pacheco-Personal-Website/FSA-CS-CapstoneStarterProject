@@ -2,9 +2,12 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 
 // Login component
-const Login = ({ setAuth }) => {
+const LoginRegister = ({ setAuth }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [showLogin, setShowLogin] = useState(true);
 
   const submitLogin = (ev) => {
     ev.preventDefault();
@@ -33,7 +36,7 @@ const Login = ({ setAuth }) => {
 
   const submitRegister = async () => {
     try {
-      await register({ username, password });
+      await register({ username, password, email, phone });
     } catch (err) {
       // setError(err.message);
     }
@@ -51,7 +54,7 @@ const Login = ({ setAuth }) => {
     const json = await response.json();
     console.log(json);
     if (response.ok) {
-      login({ username, password });
+      login({ username, password, email, phone });
     } else {
       console.log(json);
     }
@@ -59,30 +62,66 @@ const Login = ({ setAuth }) => {
 
   return (
     <div>
-      <form>
-        <input
-          value={username}
-          placeholder="username"
-          onChange={(ev) => setUsername(ev.target.value)}
-        />
-        <input
-          value={password}
-          placeholder="password"
-          onChange={(ev) => setPassword(ev.target.value)}
-        />
-      </form>
-      <button disabled={!username || !password} onClick={submitLogin}>
-        Login
-      </button>
-      <button disabled={!username || !password} onClick={submitRegister}>
-        Register
-      </button>
+      {showLogin ? (
+        <div>
+          <h2>Login</h2>
+          <form>
+            <input
+              value={username}
+              placeholder="username"
+              onChange={(ev) => setUsername(ev.target.value)}
+            />
+            <input
+              value={password}
+              placeholder="password"
+              onChange={(ev) => setPassword(ev.target.value)}
+            />
+            <button disabled={!username || !password} onClick={submitLogin}>
+              Login
+            </button>
+          </form>
+          <button onClick={() => setShowLogin(false)}>Register</button>
+        </div>
+      ) : (
+        <div>
+          <h2>Register</h2>
+          <form>
+            <input
+              value={username}
+              placeholder="username"
+              onChange={(ev) => setUsername(ev.target.value)}
+            />
+            <input
+              value={password}
+              placeholder="password"
+              onChange={(ev) => setPassword(ev.target.value)}
+            />
+            <input
+              value={email}
+              placeholder="email"
+              onChange={(ev) => setEmail(ev.target.value)}
+            />
+            <input
+              value={phone}
+              placeholder="phone"
+              onChange={(ev) => setPhone(ev.target.value)}
+            />
+            <button
+              disabled={!username || !password || !email}
+              onClick={submitRegister}
+            >
+              Register
+            </button>
+          </form>
+          <button onClick={() => setShowLogin(true)}>Login</button>
+        </div>
+      )}
     </div>
   );
 };
 
-Login.propTypes = {
-  login: PropTypes.func,
+LoginRegister.propTypes = {
   setAuth: PropTypes.func,
 };
-export default Login;
+
+export default LoginRegister;

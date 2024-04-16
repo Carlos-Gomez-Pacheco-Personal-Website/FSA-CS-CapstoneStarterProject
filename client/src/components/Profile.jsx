@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import profilePicture from "../assets/l60Hf.png";
 
 const Profile = ({ user }) => {
   if (!user) {
@@ -8,7 +9,10 @@ const Profile = ({ user }) => {
   return (
     <div>
       <h2>Profile</h2>
+      <img src={profilePicture} alt="Profile" width={150} />
       <p>Username: {user.username}</p>
+      <p>Email: {user.email}</p>
+      <p>Phone: {user.phone}</p>
       {/* Render other user details as needed */}
     </div>
   );

@@ -361,7 +361,7 @@ const init = async () => {
       quantity: 10,
       description: "A high quality laptop",
       image:
-        "https://th.bing.com/th/id/R.6280cf1dc3a15f0473365adfc5c65415?rik=dgPgRpkmpHNFqA&pid=ImgRaw&r=0",
+        "https://dailytwocents.com/wp-content/uploads/2019/12/Gaming-Laptop-2.jpg",
       category_id: electronics.id,
     }),
     createProduct({
@@ -386,9 +386,27 @@ const init = async () => {
 
   // Create users
   const [moe, lucy, admin] = await Promise.all([
-    createUser({ username: "moe", password: "123456", is_admin: false }),
-    createUser({ username: "lucy", password: "123457", is_admin: false }),
-    createUser({ username: "admin", password: "admin123", is_admin: true }),
+    createUser({
+      username: "moe",
+      password: "123456",
+      email: "moe@example.com",
+      phone: "123-456-7890",
+      is_admin: false,
+    }),
+    createUser({
+      username: "lucy",
+      password: "123457",
+      email: "lucy@example.com",
+      phone: "123-456-7891",
+      is_admin: false,
+    }),
+    createUser({
+      username: "admin",
+      password: "admin123",
+      email: "admin@example.com",
+      phone: "123-456-7892",
+      is_admin: true,
+    }),
   ]);
 
   // Add products to cart
@@ -407,3 +425,29 @@ const init = async () => {
 };
 
 init();
+
+// // Add products to cart
+// await Promise.all([
+//   addToCart({ user_id: moe.id, product_id: products[0].id, quantity: 1 }),
+//   addToCart({ user_id: lucy.id, product_id: products[1].id, quantity: 2 }),
+// ]);
+
+// // Add products to favorites
+// await Promise.all([
+//   createFavorite({ user_id: moe.id, product_id: products[2].id }),
+//   createFavorite({ user_id: lucy.id, product_id: products[3].id }),
+// ]);
+
+// // Create products
+// const products = [];
+// for (let i = 0; i < 50; i++) { // change 50 to the number of products you want to create
+//   const product = await createProduct({
+//     name: `Product ${i}`,
+//     price: Math.floor(Math.random() * 1000),
+//     quantity: Math.floor(Math.random() * 100),
+//     description: `This is product ${i}`,
+//     image: "https://example.com/product.jpg", // replace with your image URL
+//     category_id: [electronics.id, clothing.id, home.id][Math.floor(Math.random() * 3)],
+//   });
+//   products.push(product);
+// }
