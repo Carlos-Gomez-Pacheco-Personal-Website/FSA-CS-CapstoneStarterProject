@@ -17,8 +17,8 @@ const ProductDetails = ({
 
   const getReviews = async () => {
     const response = await fetch(`/api/products/${id}/reviews`);
-    const reviews = await response.json();
-    setReviews(reviews);
+    const data = await response.json();
+    setReviews(data);
   };
 
   useEffect(() => {
@@ -59,6 +59,12 @@ const ProductDetails = ({
 
   return (
     <div>
+      <img
+        src={product.image}
+        alt={product.name}
+        className="img-class"
+        width={200}
+      />
       <h2>{product.name}</h2>
       <p>{product.description}</p>
       <p>Quantity available: {product.quantity}</p>
