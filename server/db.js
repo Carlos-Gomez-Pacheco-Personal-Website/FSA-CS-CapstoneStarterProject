@@ -106,7 +106,7 @@ const authenticate = async ({ username, password }) => {
     throw error;
   }
   const SQL = `
-    SELECT id, password, username 
+    SELECT id, password, username, phone, email 
     FROM users
     WHERE username=$1;
   `;
@@ -126,6 +126,8 @@ const authenticate = async ({ username, password }) => {
     user: {
       id: response.rows[0].id,
       username: response.rows[0].username,
+      email: response.rows[0].email,
+      phone: response.rows[0].phone,
     },
   };
 };
@@ -141,7 +143,8 @@ const findUserWithToken = async (token) => {
     throw error;
   }
   const SQL = `
-    SELECT id, username FROM users WHERE id=$1;
+    SELECT id, username, email, phone
+     FROM users WHERE id=$1;
   `;
   const response = await client.query(SQL, [id]);
   if (!response.rows.length) {
