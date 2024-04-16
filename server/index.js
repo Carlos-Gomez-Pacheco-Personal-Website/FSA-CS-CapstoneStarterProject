@@ -316,8 +316,16 @@ app.get("/api/products/:id/reviews", async (req, res, next) => {
   }
 });
 app.post("/api/products/:id/reviews", async (req, res, next) => {
+  console.log(req.body);
   try {
-    res.send(await createReview(req.params.id, req.body));
+    res.send(
+      await createReview({
+        userId: req.body.userId,
+        productId: req.params.id,
+        content: req.body.content,
+        rating: req.body.rating,
+      })
+    );
   } catch (ex) {
     next(ex);
   }

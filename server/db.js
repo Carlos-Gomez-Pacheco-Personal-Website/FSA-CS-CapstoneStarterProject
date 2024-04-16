@@ -402,14 +402,9 @@ const getReviews = async (productId) => {
   return reviews.rows;
 };
 
-const createReview = async (productId, { content, rating }) => {
+const createReview = async ({ userId, productId, content, rating }) => {
   const SQL = `INSERT INTO reviews (user_id, product_id, content, rating) VALUES ($1, $2, $3, $4) RETURNING *`;
-  const review = await client.query(SQL, [
-    req.user.id,
-    productId,
-    content,
-    rating,
-  ]);
+  const review = await client.query(SQL, [userId, productId, content, rating]);
   return review.rows[0];
 };
 

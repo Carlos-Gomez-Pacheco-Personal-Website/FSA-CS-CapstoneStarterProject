@@ -292,6 +292,7 @@ function App() {
                 addFavorite={addFavorite}
                 removeFavorite={removeFavorite}
                 fetchProduct={fetchProduct}
+                auth={auth}
               />
             )}
           </Route>

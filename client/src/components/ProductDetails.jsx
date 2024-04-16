@@ -7,10 +7,17 @@ const ProductDetails = ({
   addFavorite,
   removeFavorite,
   fetchProduct,
+  auth,
 }) => {
   const { id } = useParams();
   const [product, setProduct] = useState({});
   const [review, setReview] = useState("");
+  const [rating, setRating] = useState(5);
+  // const [reviews, setReviews] = useState();
+
+  // const getReviews = async () => {
+  //   console.log("getReviews");
+  // }
 
   useEffect(() => {
     const getProduct = async () => {
@@ -25,7 +32,11 @@ const ProductDetails = ({
     // Add your API endpoint to submit the review
     const response = await fetch(`/api/products/${id}/reviews`, {
       method: "POST",
-      body: JSON.stringify({ review }),
+      body: JSON.stringify({
+        userId: auth.id,
+        content: review,
+        rating: rating,
+      }),
       headers: {
         "Content-Type": "application/json",
       },
@@ -62,6 +73,15 @@ const ProductDetails = ({
         onChange={(e) => setReview(e.target.value)}
         placeholder="Write your review here"
       />
+      <label htmlFor="rating">Rate the Product</label>
+      <input
+        name="rating"
+        type="number"
+        value={rating}
+        max={5}
+        min={1}
+        onChange={(e) => setRating(e.target.value)}
+      />
       <button onClick={submitReview}>Submit Review</button>
     </div>
   );
@@ -70,6 +90,9 @@ const ProductDetails = ({
 ProductDetails.propTypes = {
   addFavorite: PropTypes.func,
   addToCart: PropTypes.func,
+  auth: PropTypes.shape({
+    id: PropTypes.any,
+  }),
   fetchProduct: PropTypes.func,
   removeFavorite: PropTypes.func,
 };
