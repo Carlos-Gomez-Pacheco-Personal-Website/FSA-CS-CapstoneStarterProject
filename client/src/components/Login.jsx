@@ -54,7 +54,7 @@ const LoginRegister = ({ setAuth }) => {
     const json = await response.json();
     console.log(json);
     if (response.ok) {
-      login({ username, password, email, phone });
+      login({ username, password });
     } else {
       console.log(json);
     }
