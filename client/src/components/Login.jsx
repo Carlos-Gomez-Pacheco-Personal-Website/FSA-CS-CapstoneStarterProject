@@ -34,7 +34,9 @@ const LoginRegister = ({ setAuth }) => {
     }
   };
 
-  const submitRegister = async () => {
+  const submitRegister = async (ev) => {
+    ev.preventDefault();
+
     try {
       await register({ username, password, email, phone });
     } catch (err) {
