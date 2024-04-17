@@ -54,7 +54,6 @@ const LoginRegister = ({ setAuth }) => {
     });
 
     const json = await response.json();
-    console.log(json);
     if (response.ok) {
       login({ username, password });
     } else {

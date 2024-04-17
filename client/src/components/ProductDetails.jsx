@@ -32,7 +32,6 @@ const ProductDetails = ({
   }, [id, fetchProduct]);
 
   const submitReview = async () => {
-    // Add your API endpoint to submit the review
     const response = await fetch(`/api/products/${id}/reviews`, {
       method: "POST",
       body: JSON.stringify({
@@ -96,7 +95,8 @@ const ProductDetails = ({
         <h2>Reviews</h2>
         {reviews.map((review) => (
           <div key={review.id}>
-            <p>User ID: {review.user_id}</p>
+            <p>User: {auth.username}</p>
+            {/* <p>User ID: {review.user_id}</p> */}
             <p>Content: {review.content}</p>
             <p>Rating: {review.rating}</p>
           </div>
@@ -111,6 +111,7 @@ ProductDetails.propTypes = {
   addToCart: PropTypes.func,
   auth: PropTypes.shape({
     id: PropTypes.any,
+    username: PropTypes.string,
   }),
   fetchProduct: PropTypes.func,
   removeFavorite: PropTypes.func,
