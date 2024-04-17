@@ -47,6 +47,7 @@ const ProductDetails = ({
     if (response.ok) {
       alert("Review submitted!");
       setReview("");
+      getReviews();
     } else {
       alert("Failed to submit review");
     }
