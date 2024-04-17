@@ -1,12 +1,25 @@
 // Cart Component
 import PropTypes from "prop-types";
 import { Link, useHistory } from "react-router-dom";
+import { useState } from "react";
 
 const Cart = ({ cart, updateCart, checkout, removeFromCart }) => {
   const history = useHistory();
 
+  const [street, setStreet] = useState("");
+  const [apartment, setApartment] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [zipCode, setZipCode] = useState("");
+
   const handleCheckout = async () => {
-    await checkout();
+    await checkout({
+      street,
+      apartment,
+      city,
+      state,
+      zipCode,
+    });
     history.push("/checkout");
   };
   return (
@@ -46,6 +59,34 @@ const Cart = ({ cart, updateCart, checkout, removeFromCart }) => {
           </div>
         ) : null
       )}
+      <form>
+        <input
+          value={street}
+          placeholder="Street"
+          onChange={(ev) => setStreet(ev.target.value)}
+        />
+        <input
+          value={apartment}
+          placeholder="Apartment"
+          onChange={(ev) => setApartment(ev.target.value)}
+        />
+        <input
+          value={city}
+          placeholder="City"
+          onChange={(ev) => setCity(ev.target.value)}
+        />
+        <input
+          value={state}
+          placeholder="State"
+          onChange={(ev) => setState(ev.target.value)}
+        />
+        <input
+          value={zipCode}
+          placeholder="Zip Code"
+          onChange={(ev) => setZipCode(ev.target.value)}
+        />
+      </form>
+
       <button onClick={handleCheckout}>Checkout</button>
       <Link to="/">Return</Link>
     </div>

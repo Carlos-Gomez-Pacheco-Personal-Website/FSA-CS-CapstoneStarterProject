@@ -19,6 +19,8 @@ function App() {
   const [cart, setCart] = useState([]);
   const [orders, setOrders] = useState([]);
   const [cartisLoading, setCartisLoading] = useState(false);
+  const [address, setAddress] = useState({});
+  const [totalPrice, setTotalPrice] = useState(0);
 
   // fetch Authentication
   useEffect(() => {
@@ -278,7 +280,16 @@ function App() {
             )}
           </Route>
           <Route path="/checkout">
-            {!auth.id ? <Redirect to="/login" /> : <Checkout orders={orders} />}
+            {!auth.id ? (
+              <Redirect to="/login" />
+            ) : (
+              <Checkout
+                orders={orders}
+                cart={cart}
+                address={address}
+                totalPrice={totalPrice}
+              />
+            )}
           </Route>
           <Route path="/orders">
             {!auth.id ? <Redirect to="/login" /> : <Orders orders={orders} />}
