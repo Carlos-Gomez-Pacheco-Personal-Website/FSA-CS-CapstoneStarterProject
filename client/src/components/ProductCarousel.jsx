@@ -17,7 +17,7 @@ ConditionalCarousel.propTypes = {
 const ProductCarousel = () => {
   return (
     <ConditionalCarousel>
-      <Carousel>
+      <Carousel className="m-3">
         <Carousel.Item>
           <img
             className="d-block w-100"
