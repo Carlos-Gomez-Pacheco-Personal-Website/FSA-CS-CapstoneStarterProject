@@ -1,6 +1,17 @@
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import {
+  Card,
+  Button,
+  Dropdown,
+  FormControl,
+  InputGroup,
+  Container,
+  Row,
+  Col,
+  Form,
+} from "react-bootstrap";
 
 const ProductList = ({
   removeFavorite,
@@ -33,111 +44,128 @@ const ProductList = ({
         (product) => product[filterKey] <= filterValue
       );
     } else {
-      filteredProducts = filteredProducts.filter(
-        (product) => product[filterKey] === filterValue
+      filteredProducts = filteredProducts.filter((product) =>
+        product[filterKey].toLowerCase().includes(filterValue.toLowerCase())
       );
     }
   }
 
   return (
-    <div>
+    <Container>
       <h1>Products</h1>
-      <div>
-        <label>Sort by: </label>
-        <select value={sortKey} onChange={(e) => setSortKey(e.target.value)}>
-          <option value="">--Select--</option>
-          <option value="name">Name</option>
-          <option value="price">Price</option>
-          {/* Add more options as needed */}
-        </select>
-      </div>
-      <div>
-        <label>Filter by: </label>
-        <select
-          value={filterKey}
-          onChange={(e) => setFilterKey(e.target.value)}
-        >
-          <option value="">--Select--</option>
-          <option value="name">Name</option>
-          <option value="price">Price</option>
-          {/* Add more options as needed */}
-        </select>
-        {filterKey === "price" ? (
-          <input
-            type="range"
-            min="0"
-            max="1000" // Adjust this value based on your maximum price
-            value={filterValue}
-            onChange={(e) => setFilterValue(e.target.value)}
-          />
-        ) : (
-          <input
-            type="text"
-            placeholder="Filter Value"
-            value={filterValue}
-            onChange={(e) => setFilterValue(e.target.value)}
-          />
-        )}
-      </div>
-      <ul className="product-list">
+      <InputGroup className="mb-3">
+        <Dropdown onSelect={(e) => setSortKey(e)}>
+          <Dropdown.Toggle variant="outline-secondary" id="dropdown-basic">
+            Sort by
+          </Dropdown.Toggle>
+
+          <Dropdown.Menu>
+            <Dropdown.Item eventKey="name">Name</Dropdown.Item>
+            <Dropdown.Item eventKey="price">Price</Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
+        <Dropdown onSelect={(e) => setFilterKey(e)}>
+          <Dropdown.Toggle variant="outline-secondary" id="dropdown-basic">
+            Filter by
+          </Dropdown.Toggle>
+
+          <Dropdown.Menu>
+            <Dropdown.Item eventKey="name">Name</Dropdown.Item>
+            <Dropdown.Item eventKey="price">Price</Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
+        {filterKey &&
+          (filterKey === "price" ? (
+            <FormControl
+              type="range"
+              min="0"
+              max="1000"
+              value={filterValue}
+              onChange={(e) => setFilterValue(e.target.value)}
+            />
+          ) : (
+            <FormControl
+              type="text"
+              placeholder="Filter Value"
+              value={filterValue}
+              onChange={(e) => setFilterValue(e.target.value)}
+            />
+          ))}
+      </InputGroup>
+      <Row>
         {filteredProducts.map((product) => {
           const isFavorite = favorites.find(
             (favorite) => favorite.product_id === product.id
           );
           return (
-            <li key={product.id} className={isFavorite ? "favorite" : ""}>
-              <div className="product-details">
-                <div className="product-div">
-                  <p>Name: {product.name}</p>
-                  <p>Price: ${product.price}</p>
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="img-class"
-                  />
-                </div>
-              </div>
-              {auth.id && (
-                <div className="product-actions">
-                  {isFavorite ? (
-                    <button
-                      onClick={() =>
-                        removeFavorite && removeFavorite(isFavorite.id)
-                      }
-                    >
-                      Remove from Favorites
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => addFavorite && addFavorite(product.id)}
-                    >
-                      Add to Favorites
-                    </button>
+            <Col sm={12} md={6} lg={4} xl={3} key={product.id}>
+              <Card className={isFavorite ? "favorite" : ""}>
+                <Card.Img
+                  variant="top"
+                  src={product.image}
+                  alt={product.name}
+                />
+                <Card.Body>
+                  <Card.Title>{product.name}</Card.Title>
+                  <Card.Text>Price: ${product.price}</Card.Text>
+                  {auth.id && (
+                    <div>
+                      <Form.Group controlId="formBasicQuantity">
+                        <Form.Label>Quantity</Form.Label>
+                        <Form.Control type="number" min="1" defaultValue="1" />
+                      </Form.Group>
+                      <Form.Group controlId="formBasicSize">
+                        <Form.Label>Size</Form.Label>
+                        <Form.Control as="select">
+                          <option>S</option>
+                          <option>M</option>
+                          <option>L</option>
+                          <option>XL</option>
+                        </Form.Control>
+                      </Form.Group>
+                      {isAddedtoCart(product.id) ? (
+                        <Button
+                          variant="danger"
+                          onClick={() => removeFromCart(product.id)}
+                        >
+                          Remove from Cart
+                        </Button>
+                      ) : (
+                        <Button
+                          variant="primary"
+                          disabled={cartisLoading}
+                          onClick={() => addToCart(product.id)}
+                        >
+                          Add to Cart
+                        </Button>
+                      )}
+                      {isFavorite ? (
+                        <Button
+                          variant="outline-primary"
+                          onClick={() => removeFavorite(isFavorite.id)}
+                        >
+                          Remove Favorite
+                        </Button>
+                      ) : (
+                        <Button
+                          variant="outline-primary"
+                          onClick={() => addFavorite(product.id)}
+                        >
+                          Add Favorite
+                        </Button>
+                      )}
+                      <Link to={`/product/${product.id}`}>
+                        <Button variant="info">View Details</Button>
+                      </Link>
+                    </div>
                   )}
-                  {isAddedtoCart(product.id) ? (
-                    <button onClick={() => removeFromCart(product.id)}>
-                      Remover
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => addToCart && addToCart(product.id)}
-                      disabled={cartisLoading}
-                    >
-                      {" "}
-                      {cartisLoading ? "Loading" : "Add to Cart"}
-                    </button>
-                  )}
-
-                  <Link to={`/product/${product.id}`}>
-                    <button>View Details</button>
-                  </Link>
-                </div>
-              )}
-            </li>
+                </Card.Body>
+              </Card>
+            </Col>
           );
         })}
-      </ul>
-    </div>
+      </Row>
+    </Container>
   );
 };
 
@@ -156,63 +184,3 @@ ProductList.propTypes = {
 };
 
 export default ProductList;
-
-// import PropTypes from "prop-types";
-// import { Link } from "react-router-dom";
-
-// const ProductList = ({
-//   removeFavorite,
-//   addFavorite,
-//   addToCart,
-//   products,
-//   favorites,
-//   cartisLoading,
-// }) => {
-//   return (
-//     <div className="row"> {/* Replace product-list class with Bootstrap row class */}
-//       <div className="col-12">Home, Slack</div>
-//       {products.map((product) => {
-//         const isFavorite = favorites.find(
-//           (favorite) => favorite.product_id === product.id
-//         );
-//         return (
-//           <div key={product.id} className={`col-12 col-md-6 col-lg-4 ${isFavorite ? "favorite" : ""}`}> {/* Replace li elements with Bootstrap col classes */}
-//             <div className="card"> {/* Add Bootstrap card class */}
-//               <div className="card-body">
-//                 <h5 className="card-title">{product.name}</h5>
-//                 <p className="card-text">Price: ${product.price}</p>
-//                 <img
-//                   src={product.image}
-//                   alt={product.name}
-//                   className="img-fluid" {/* Replace img-class class with Bootstrap img-fluid class */}
-//                 />
-//               </div>
-//               <div className="card-footer">
-//                 {isFavorite ? (
-//                   <button className="btn btn-primary" onClick={() => removeFavorite(isFavorite.id)}> {/* Add Bootstrap btn and btn-primary classes */}
-//                     Remove from Favorites
-//                   </button>
-//                 ) : (
-//                   <button className="btn btn-primary" onClick={() => addFavorite(product.id)}> {/* Add Bootstrap btn and btn-primary classes */}
-//                     Add to Favorites
-//                   </button>
-//                 )}
-//                 <button
-//                   className="btn btn-primary" {/* Add Bootstrap btn and btn-primary classes */}
-//                   onClick={() => addToCart && addToCart(product.id)}
-//                   disabled={cartisLoading}
-//                 >
-//                   {" "}
-//                   {cartisLoading ? "Loading" : "Add to Cart"}
-//                 </button>
-//                 <Link to={`/product/${product.id}`}>View Details</Link>
-//               </div>
-//             </div>
-//           </div>
-//         );
-//       })}
-//       <Link className="col-12" to="/cart">Cart</Link>
-//     </div>
-//   );
-// };
-// export default ProductList;

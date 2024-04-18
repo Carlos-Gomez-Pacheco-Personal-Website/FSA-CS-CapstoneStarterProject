@@ -32,7 +32,7 @@ const ProductCarousel = () => {
         <Carousel.Item>
           <img
             className="d-block w-100"
-            src="https://th.bing.com/th/id/OIP.3tF2WjzO9rJLaqLiHrxFEgHaEK?rs=1&pid=ImgDetMain"
+            src="https://aogdesign.com.au/wp-content/uploads/2022/02/ecommerce-website-shopping-image.jpg"
             alt="Second slide"
           />
 
