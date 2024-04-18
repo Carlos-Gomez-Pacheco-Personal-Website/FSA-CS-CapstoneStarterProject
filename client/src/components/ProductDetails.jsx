@@ -7,7 +7,10 @@ const ProductDetails = ({
   addToCart,
   addFavorite,
   removeFavorite,
+  removeFromCart,
   fetchProduct,
+  favorites,
+  cart,
   auth,
 }) => {
   const { id } = useParams();
@@ -54,6 +57,14 @@ const ProductDetails = ({
     }
   };
 
+  const isAddedtoCart = (product_id) => {
+    return !!cart.find((item) => item.product_id === product_id);
+  };
+
+  const isFavorite = (product_id) => {
+    return !!favorites.find((favorite) => favorite.product_id === product_id);
+  };
+
   if (!product) {
     return <div>Loading...</div>;
   }
@@ -67,17 +78,28 @@ const ProductDetails = ({
             <Card.Title className="m-3">{product.name}</Card.Title>
             <Card.Text>{product.description}</Card.Text>
             <Card.Text>Quantity available: {product.quantity}</Card.Text>
-            <Button onClick={() => addToCart && addToCart(product.id)}>
-              Add to Cart
-            </Button>
-            <Button onClick={() => addFavorite && addFavorite(product.id)}>
-              Add to Favorites
-            </Button>
-            <Button
-              onClick={() => removeFavorite && removeFavorite(product.id)}
-            >
-              Remove from Favorites
-            </Button>
+            {isAddedtoCart(product.id) ? (
+              <Button
+                onClick={() => removeFromCart && removeFromCart(product.id)}
+              >
+                Remove from Cart
+              </Button>
+            ) : (
+              <Button onClick={() => addToCart && addToCart(product.id)}>
+                Add to Cart
+              </Button>
+            )}
+            {isFavorite(product.id) ? (
+              <Button
+                onClick={() => removeFavorite && removeFavorite(product.id)}
+              >
+                Remove from Favorites
+              </Button>
+            ) : (
+              <Button onClick={() => addFavorite && addFavorite(product.id)}>
+                Add to Favorites
+              </Button>
+            )}
           </Card.Body>
         </Col>
         <Col md={6} className="review-form">
@@ -137,8 +159,11 @@ ProductDetails.propTypes = {
     id: PropTypes.any,
     username: PropTypes.string,
   }),
+  cart: PropTypes.array,
+  favorites: PropTypes.array,
   fetchProduct: PropTypes.func,
   removeFavorite: PropTypes.func,
+  removeFromCart: PropTypes.func,
 };
 
 export default ProductDetails;

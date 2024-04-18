@@ -326,9 +326,12 @@ function App() {
             ) : (
               <ProductDetails
                 addToCart={addToCart}
+                removeFromCart={removeFromCart}
                 addFavorite={addFavorite}
                 removeFavorite={removeFavorite}
                 fetchProduct={fetchProduct}
+                favorites={favorites}
+                cart={cart}
                 auth={auth}
               />
             )}
