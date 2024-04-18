@@ -151,7 +151,7 @@ li {
 
 .carousel-item img {
   height: 400px; /* Adjust this value as needed */
-  object-fit: cover; /* This will ensure your images cover the frame without distortion */
+  object-fit: cover;
 }
 
 .auth-form {
@@ -237,6 +237,10 @@ h1,
 h2,
 h3 {
   font-family: Arial, sans-serif;
+}
+
+.Brandlogo {
+  padding-left: 16px;
 }
 
 @media (max-width: 1200px) {

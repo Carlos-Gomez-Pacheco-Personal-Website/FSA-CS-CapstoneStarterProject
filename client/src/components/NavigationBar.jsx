@@ -6,7 +6,7 @@ import LogoPicture from "../assets/logo.jpeg";
 const NavigationBar = ({ auth, logout }) => {
   return (
     <Navbar bg="dark" variant="dark">
-      <Navbar.Brand as={Link} to="/">
+      <Navbar.Brand className="Brandlogo" as={Link} to="/">
         <img
           src={LogoPicture}
           width="85"
