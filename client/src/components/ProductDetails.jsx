@@ -64,7 +64,7 @@ const ProductDetails = ({
         <Col md={6} className="product-details">
           <Card.Img variant="top" src={product.image} alt={product.name} />
           <Card.Body>
-            <Card.Title>{product.name}</Card.Title>
+            <Card.Title className="m-3">{product.name}</Card.Title>
             <Card.Text>{product.description}</Card.Text>
             <Card.Text>Quantity available: {product.quantity}</Card.Text>
             <Button onClick={() => addToCart && addToCart(product.id)}>
