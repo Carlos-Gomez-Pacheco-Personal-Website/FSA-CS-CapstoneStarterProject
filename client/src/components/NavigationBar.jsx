@@ -1,11 +1,12 @@
 import PropTypes from "prop-types";
-import LogoPicture from "../assets/logo.jpeg";
+import { Link } from "react-router-dom";
 import { Navbar, Nav } from "react-bootstrap";
+import LogoPicture from "../assets/logo.jpeg";
 
 const NavigationBar = ({ auth, logout }) => {
   return (
     <Navbar bg="dark" variant="dark">
-      <Navbar.Brand href="/">
+      <Navbar.Brand as={Link} to="/">
         <img
           src={LogoPicture}
           width="85"
@@ -15,18 +16,26 @@ const NavigationBar = ({ auth, logout }) => {
         />
       </Navbar.Brand>
       <Nav className="mr-auto">
-        <Nav.Link href="/">Home</Nav.Link>
+        <Nav.Link as={Link} to="/">
+          Home
+        </Nav.Link>
         {auth && auth.id ? (
           <>
-            <Nav.Link href="/cart">Cart</Nav.Link>
-            <Nav.Link href="/orders">Orders</Nav.Link>
-            <Nav.Link href="/profile">Profile</Nav.Link>
+            <Nav.Link as={Link} to="/cart">
+              Cart
+            </Nav.Link>
+            <Nav.Link as={Link} to="/orders">
+              Orders
+            </Nav.Link>
+            <Nav.Link as={Link} to="/profile">
+              Profile
+            </Nav.Link>
             <Nav.Link onClick={logout} className="btn btn-primary">
               Logout
             </Nav.Link>
           </>
         ) : (
-          <Nav.Link href="/login" className="btn btn-primary">
+          <Nav.Link as={Link} to="/login" className="btn btn-primary">
             Login
           </Nav.Link>
         )}

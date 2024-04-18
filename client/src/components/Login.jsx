@@ -16,7 +16,7 @@ const LoginRegister = ({ setAuth }) => {
     try {
       await login({ username, password });
     } catch (err) {
-      setError(err.message);
+      setError("Authentication Failed, Username or password not found");
     }
   };
 
@@ -45,7 +45,11 @@ const LoginRegister = ({ setAuth }) => {
     try {
       await register({ username, password, email, phone });
     } catch (err) {
-      setError(err.message);
+      if (err.response && err.response.status === 500) {
+        setError("User or Email Already Registered");
+      } else {
+        setError("Error registering, please try again");
+      }
     }
   };
 
@@ -63,6 +67,8 @@ const LoginRegister = ({ setAuth }) => {
       login({ username, password });
     } else {
       console.log(json);
+      const error = await response.json();
+      throw new Error(error.message);
     }
   };
 
@@ -103,6 +109,7 @@ const LoginRegister = ({ setAuth }) => {
               Register
             </Button>
           </Form>
+          {error && <Alert variant="danger">{error}</Alert>}
         </div>
       ) : (
         <div>
@@ -159,6 +166,7 @@ const LoginRegister = ({ setAuth }) => {
               Login
             </Button>
           </Form>
+          {error && <Alert variant="danger">{error}</Alert>}
         </div>
       )}
       {error && <Alert variant="danger">{error}</Alert>}
