@@ -1,6 +1,9 @@
 import PropTypes from "prop-types";
+// import { useLocation } from "react-router-dom";
 
 const Checkout = ({ orders, cart, address, totalPrice }) => {
+  // const location = useLocation();
+  // const {cart, products} = location
   return (
     <div>
       <h2>Thank you for your purchase!</h2>

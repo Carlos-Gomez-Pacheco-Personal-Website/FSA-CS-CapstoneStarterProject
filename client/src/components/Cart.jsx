@@ -20,7 +20,9 @@ const Cart = ({ cart, updateCart, checkout, removeFromCart }) => {
       state,
       zipCode,
     });
-    history.push("/checkout");
+    history.push(
+      "/checkout" //, {cart, products}
+    );
   };
   return (
     <div className="cart">

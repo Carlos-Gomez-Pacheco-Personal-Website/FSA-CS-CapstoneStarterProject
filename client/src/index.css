@@ -6,7 +6,7 @@ body {
 .navbar {
   display: flex;
   justify-content: space-around;
-  padding: 1rem;
+  padding: 1rem 1rem;
   background-color: #333;
   color: #fff;
 }
@@ -218,6 +218,25 @@ li {
 
 .favorite {
   border: solid 1px dodgerBlue;
+}
+
+.product-details,
+.review-form,
+.reviews-list {
+  margin-bottom: 2rem;
+  border: 1px solid #ddd;
+  padding: 1rem;
+  border-radius: 0.25rem;
+}
+
+.review-item {
+  margin-bottom: 1rem;
+}
+
+h1,
+h2,
+h3 {
+  font-family: Arial, sans-serif;
 }
 
 @media (max-width: 1200px) {
