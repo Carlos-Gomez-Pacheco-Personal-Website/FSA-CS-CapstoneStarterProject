@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import NavigationBar from "./components/NavigationBar";
+import ProductCarousel from "./components/ProductCarousel";
 import Login from "./components/Login";
 import Profile from "./components/Profile";
 import ProductList from "./components/ProductList";
@@ -284,6 +285,7 @@ function App() {
     <BrowserRouter>
       <NavigationBar auth={auth} logout={logout} />
       <div className="container">
+        <ProductCarousel />
         <Switch>
           <Route path="/login">
             {auth.id ? <Redirect to="/" /> : <Login setAuth={setAuth} />}
@@ -349,6 +351,9 @@ function App() {
           </Route>
         </Switch>
       </div>
+      <footer className="footer">
+        <p>© 2024 Your E-commerce Website</p>
+      </footer>
     </BrowserRouter>
   );
 }
