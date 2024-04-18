@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
+import { Form, Button, Alert } from "react-bootstrap";
 
 // Login component
 const LoginRegister = ({ setAuth }) => {
@@ -8,11 +9,15 @@ const LoginRegister = ({ setAuth }) => {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [showLogin, setShowLogin] = useState(true);
+  const [error, setError] = useState("");
 
-  const submitLogin = (ev) => {
+  const submitLogin = async (ev) => {
     ev.preventDefault();
-    login({ username, password });
-    // console.log(username, password);
+    try {
+      await login({ username, password });
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
   const login = async (credentials) => {
@@ -40,7 +45,7 @@ const LoginRegister = ({ setAuth }) => {
     try {
       await register({ username, password, email, phone });
     } catch (err) {
-      // setError(err.message);
+      setError(err.message);
     }
   };
 
@@ -62,61 +67,101 @@ const LoginRegister = ({ setAuth }) => {
   };
 
   return (
-    <div>
+    <div className="auth-form">
       {showLogin ? (
         <div>
           <h2>Login</h2>
-          <form>
-            <input
-              value={username}
-              placeholder="username"
-              onChange={(ev) => setUsername(ev.target.value)}
-            />
-            <input
-              value={password}
-              placeholder="password"
-              onChange={(ev) => setPassword(ev.target.value)}
-            />
-            <button disabled={!username || !password} onClick={submitLogin}>
+          <Form onSubmit={submitLogin}>
+            <Form.Group controlId="formBasicEmail">
+              <Form.Label>Username</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter username"
+                value={username}
+                onChange={(ev) => setUsername(ev.target.value)}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="formBasicPassword">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(ev) => setPassword(ev.target.value)}
+              />
+            </Form.Group>
+
+            <Button
+              variant="primary"
+              type="submit"
+              disabled={!username || !password}
+            >
               Login
-            </button>
-          </form>
-          <button onClick={() => setShowLogin(false)}>Register</button>
+            </Button>
+            <Button variant="link" onClick={() => setShowLogin(false)}>
+              Register
+            </Button>
+          </Form>
         </div>
       ) : (
         <div>
           <h2>Register</h2>
-          <form>
-            <input
-              value={username}
-              placeholder="username"
-              onChange={(ev) => setUsername(ev.target.value)}
-            />
-            <input
-              value={password}
-              placeholder="password"
-              onChange={(ev) => setPassword(ev.target.value)}
-            />
-            <input
-              value={email}
-              placeholder="email"
-              onChange={(ev) => setEmail(ev.target.value)}
-            />
-            <input
-              value={phone}
-              placeholder="phone"
-              onChange={(ev) => setPhone(ev.target.value)}
-            />
-            <button
+          <Form onSubmit={submitRegister}>
+            <Form.Group controlId="formBasicEmail">
+              <Form.Label>Username</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter username"
+                value={username}
+                onChange={(ev) => setUsername(ev.target.value)}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="formBasicPassword">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(ev) => setPassword(ev.target.value)}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="formBasicEmail">
+              <Form.Label>Email address</Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="Enter email"
+                value={email}
+                onChange={(ev) => setEmail(ev.target.value)}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="formBasicPhone">
+              <Form.Label>Phone Number</Form.Label>
+              <Form.Control
+                type="tel"
+                placeholder="Enter phone number"
+                value={phone}
+                onChange={(ev) => setPhone(ev.target.value)}
+              />
+            </Form.Group>
+
+            <Button
+              variant="primary"
+              type="submit"
               disabled={!username || !password || !email}
-              onClick={submitRegister}
             >
               Register
-            </button>
-          </form>
-          <button onClick={() => setShowLogin(true)}>Login</button>
+            </Button>
+            <Button variant="link" onClick={() => setShowLogin(true)}>
+              Login
+            </Button>
+          </Form>
         </div>
       )}
+      {error && <Alert variant="danger">{error}</Alert>}
     </div>
   );
 };
