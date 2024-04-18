@@ -58,7 +58,13 @@ const createTables = async () => {
     CREATE TABLE orders(
       id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
       user_id UUID REFERENCES users(id) NOT NULL,
-      order_date TIMESTAMP NOT NULL
+      order_date TIMESTAMP NOT NULL,
+      street VARCHAR(255),
+      apartment VARCHAR(255),
+      city VARCHAR(255),
+      state VARCHAR(255),
+      zip_code VARCHAR(255),
+      total_price NUMERIC
     );
 
     CREATE TABLE order_items(
@@ -306,6 +312,24 @@ const checkout = async (user_id) => {
   const response = await client.query(SQL, [uuid.v4(), user_id]);
   return response.rows[0];
 };
+
+// const checkout = async (user_id, address, totalPrice) => {
+//   const SQL = `
+//     INSERT INTO orders(id, user_id, order_date, street, apartment, city, state, zip_code, total_price)
+//     VALUES($1, $2, NOW(), $3, $4, $5, $6, $7, $8) RETURNING *
+//   `;
+//   const response = await client.query(SQL, [
+//     uuid.v4(),
+//     user_id,
+//     address.street,
+//     address.apartment,
+//     address.city,
+//     address.state,
+//     address.zipCode,
+//     totalPrice,
+//   ]);
+//   return response.rows[0];
+// };
 
 const createCartItem = async ({ user_id, product_id, quantity }) => {
   const SQL = `

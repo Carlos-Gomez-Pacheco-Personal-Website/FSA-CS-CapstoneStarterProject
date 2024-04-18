@@ -230,6 +230,30 @@ function App() {
     }
   };
 
+  // const checkout = async () => {
+  //   const response = await fetch(`/api/users/${auth.id}/checkout`, {
+  //     method: "POST",
+  //     body: JSON.stringify({
+  //       address,
+  //       cart,
+  //       totalPrice,
+  //     }),
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       authorization: window.localStorage.getItem("token"),
+  //     },
+  //   });
+
+  //   const json = await response.json();
+  //   if (response.ok) {
+  //     setCart([]);
+  //     setOrders([...orders, json]);
+  //     return true;
+  //   } else {
+  //     console.error("Checkout error", json);
+  //   }
+  // };
+
   // Fetch a Single Product
   const fetchProduct = async (id) => {
     try {

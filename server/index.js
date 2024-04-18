@@ -199,6 +199,17 @@ app.post("/api/users/:id/checkout", async (req, res, next) => {
   }
 });
 
+// app.post("/api/users/:id/checkout", async (req, res, next) => {
+//   try {
+//     const { id } = req.params;
+//     const { address, cart, totalPrice } = req.body;
+//     const order = await checkout(id, address, cart, totalPrice);
+//     res.send(order);
+//   } catch (ex) {
+//     next(ex);
+//   }
+// });
+
 app.post("/api/cart", async (req, res, next) => {
   try {
     const { user_id, product_id, quantity } = req.body; // destructure the properties here
