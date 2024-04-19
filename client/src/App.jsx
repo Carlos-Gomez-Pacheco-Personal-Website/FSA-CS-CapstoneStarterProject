@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import NavigationBar from "./components/NavigationBar";
+import Footer from "./components/Footer";
 import ProductCarousel from "./components/ProductCarousel";
 import Login from "./components/Login";
 import Profile from "./components/Profile";
@@ -354,9 +355,7 @@ function App() {
           </Route>
         </Switch>
       </div>
-      <footer className="footer">
-        <p>© 2024 Your E-commerce Website</p>
-      </footer>
+      <Footer />
     </BrowserRouter>
   );
 }

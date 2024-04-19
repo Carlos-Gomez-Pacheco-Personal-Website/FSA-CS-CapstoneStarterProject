@@ -31,7 +31,7 @@ const Orders = ({ orders }) => {
               }}
             >
               <p>
-                N°{index + 1} Order: {order.id}
+                N°{index + 1} Order: {order.id} , {order.date}
               </p>
               {/* <p>Total: {order.total}</p> */}
             </Col>
