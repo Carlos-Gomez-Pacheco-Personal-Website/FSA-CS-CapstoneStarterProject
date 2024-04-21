@@ -57,11 +57,11 @@ const Cart = ({ cart, updateCart, checkout, removeFromCart, setCart }) => {
               {!cart.length && <Card.Text>Your cart is empty</Card.Text>}
               {cart.map((item, key) => (
                 <Card key={key} className="mb-3">
-                  <Card.Img
+                  {/* <Card.Img
                     variant="top"
                     src={item.imageUrl}
                     style={{ width: "50px", height: "50px" }}
-                  />
+                  /> */}
                   <Card.Body>
                     <Card.Title>{item.name}</Card.Title>
                     <Card.Text>Price: {item.price}</Card.Text>

@@ -21,8 +21,6 @@ function App() {
   const [cart, setCart] = useState([]);
   const [orders, setOrders] = useState([]);
   const [cartisLoading, setCartisLoading] = useState(false);
-  // const [address, setAddress] = useState({});
-  // const [totalPrice, setTotalPrice] = useState(0);
 
   // fetch Authentication
   useEffect(() => {
