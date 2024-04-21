@@ -117,7 +117,6 @@ const authenticate = async ({ username, password }) => {
     WHERE username=$1;
   `;
   const response = await client.query(SQL, [username]);
-  console.log(response.rows);
   if (
     (!response.rows.length ||
       (await bcrypt.compare(password, response.rows[0].password))) === false
@@ -284,7 +283,6 @@ const fetchCategories = async () => {
 
 // Cart
 const addToCart = async ({ user_id, product_id, quantity }) => {
-  console.log("addToCart", quantity);
   const SQL = `
     INSERT INTO cart(id, user_id, product_id, quantity) VALUES($1, $2, $3, $4) RETURNING *
   `;
@@ -294,7 +292,6 @@ const addToCart = async ({ user_id, product_id, quantity }) => {
     product_id,
     quantity,
   ]);
-  console.log(response.rows);
   return response.rows[0];
 };
 
@@ -370,7 +367,6 @@ const fetchCart = async (user_id) => {
     WHERE c.user_id = $1
   `;
   const response = await client.query(SQL, [user_id]);
-  console.log(response.rows);
   return response.rows.map((row) => ({
     ...row,
   }));

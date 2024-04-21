@@ -139,7 +139,6 @@ app.get("/api/products", async (req, res, next) => {
 
 app.get("/api/products/:id", async (req, res, next) => {
   try {
-    console.log(req.params.id);
     res.send(await fetchSingleProduct(req.params.id));
   } catch (ex) {
     next(ex);
@@ -255,8 +254,6 @@ app.get("/api/cart/total", async (req, res, next) => {
   }
 });
 app.post("/api/users/:id/cart", async (req, res, next) => {
-  console.log(req.body.product_id);
-  console.log(req.body.quantity);
   try {
     const { id: user_id } = req.params; // rename id to user_id for clarity
     const { product_id, quantity } = req.body;
@@ -316,7 +313,6 @@ app.get("/api/users/:id/orders", async (req, res, next) => {
   try {
     const { id } = req.params;
     const orders = await fetchOrders(id);
-    console.log(orders); // Log the orders to inspect the structure
     res.send(orders);
   } catch (ex) {
     next(ex);
@@ -347,7 +343,6 @@ app.get("/api/products/:id/reviews", async (req, res, next) => {
   }
 });
 app.post("/api/products/:id/reviews", async (req, res, next) => {
-  console.log(req.body);
   try {
     res.send(
       await createReview({
