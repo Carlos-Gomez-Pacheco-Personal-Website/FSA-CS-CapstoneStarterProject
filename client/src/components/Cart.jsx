@@ -1,6 +1,6 @@
 // Cart Component
 import PropTypes from "prop-types";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useState } from "react";
 import { Container, Row, Col, Button, Form, Card } from "react-bootstrap";
 
@@ -55,11 +55,16 @@ const Cart = ({ cart, updateCart, checkout, removeFromCart, setCart }) => {
             <Card.Body>
               <Card.Title>Cart Items</Card.Title>
               {!cart.length && <Card.Text>Your cart is empty</Card.Text>}
-              {cart.map((item, key) =>
-                item ? (
-                  <div key={key}>
-                    <p>{item.name}</p>
-                    <p>Price: {item.price}</p>
+              {cart.map((item, key) => (
+                <Card key={key} className="mb-3">
+                  <Card.Img
+                    variant="top"
+                    src={item.imageUrl}
+                    style={{ width: "50px", height: "50px" }}
+                  />
+                  <Card.Body>
+                    <Card.Title>{item.name}</Card.Title>
+                    <Card.Text>Price: {item.price}</Card.Text>
 
                     <button
                       disabled={item.quantity === 1}
@@ -86,16 +91,16 @@ const Cart = ({ cart, updateCart, checkout, removeFromCart, setCart }) => {
                     <button onClick={() => removeFromCart(item.product_id)}>
                       Remove
                     </button>
-                  </div>
-                ) : null
-              )}
+                  </Card.Body>
+                </Card>
+              ))}
             </Card.Body>
           </Card>
         </Col>
         <Col md={5}>
           <Card className="checkout-container shadow">
             <Card.Body>
-              <Card.Title>Checkout Address</Card.Title>
+              <Card.Title className="text-center">Checkout Address</Card.Title>
               <Form>
                 <input
                   value={street}
@@ -132,7 +137,6 @@ const Cart = ({ cart, updateCart, checkout, removeFromCart, setCart }) => {
               >
                 Checkout
               </Button>
-              <Link to="/">Return</Link>
             </Card.Body>
           </Card>
         </Col>

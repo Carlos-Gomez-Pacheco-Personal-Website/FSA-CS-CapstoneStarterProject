@@ -199,6 +199,21 @@ li {
   object-fit: cover;
 }
 
+.btn-outline-primary,
+.btn-outline-danger {
+  margin-left: 10px;
+}
+
+.btn-primary {
+  background-color: blue;
+  border-color: blue;
+}
+
+.btn-danger {
+  background-color: red;
+  border-color: red;
+}
+
 .h2 {
   font-size: 1.5em;
   font-weight: bold;

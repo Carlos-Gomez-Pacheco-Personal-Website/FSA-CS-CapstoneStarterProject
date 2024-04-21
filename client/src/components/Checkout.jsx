@@ -20,11 +20,11 @@ const Checkout = ({ orders }) => {
         <>
           <h2>Thank you for your purchase!</h2>
           <p>Order Number: {orders.length}</p>
+          <p>Total Price: {calculateTotalPrice()}</p>
           <p>
             Shipping Address: {address.street}, {address.apartment},{" "}
             {address.city}, {address.state}, {address.zipCode}
           </p>
-          <p>Total Price: {calculateTotalPrice()}</p>
           {cart.map((item, index) => (
             <div key={index}>
               <p>
