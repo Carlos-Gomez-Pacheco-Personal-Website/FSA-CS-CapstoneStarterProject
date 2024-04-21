@@ -400,11 +400,22 @@ const isAdmin2 = async (user_id) => {
 // Orders
 const fetchOrders = async (user_id) => {
   const SQL = `
-    SELECT * FROM orders WHERE user_id = $1
+  SELECT o.*, COALESCE(array_agg(oi) FILTER (WHERE oi.id IS NOT NULL), '{}') as order_items
+  FROM orders o
+  LEFT JOIN order_items oi ON o.id = oi.order_id
+  WHERE o.user_id = $1
+  GROUP BY o.id;
   `;
   const response = await client.query(SQL, [user_id]);
   return response.rows;
 };
+// const fetchOrders = async (user_id) => {
+//   const SQL = `
+//     SELECT * FROM orders WHERE user_id = $1
+//   `;
+//   const response = await client.query(SQL, [user_id]);
+//   return response.rows;
+// };
 
 const fetchOrderItems = async (order_id) => {
   const SQL = `
@@ -423,6 +434,42 @@ const fetchOrderTotal = async (order_id) => {
   `;
   const response = await client.query(SQL, [order_id]);
   return response.rows[0].total;
+};
+
+const createOrderItems = async (order_id, cart) => {
+  const SQL = `
+    INSERT INTO order_items(id, order_id, product_id, quantity)
+    VALUES ($1, $2, $3, $4)
+  `;
+  const orderItems = [];
+  for (let item of cart) {
+    const response = await client.query(SQL, [
+      uuid.v4(),
+      order_id,
+      item.product_id,
+      item.quantity,
+    ]);
+    orderItems.push(response.rows[0]);
+  }
+  return orderItems;
+};
+
+const calculateTotalPrice = async (order_id) => {
+  const SQL = `
+    SELECT SUM(p.price * oi.quantity) as total
+    FROM order_items oi
+    JOIN products p ON p.id = oi.product_id
+    WHERE oi.order_id = $1
+  `;
+  const response = await client.query(SQL, [order_id]);
+  return response.rows[0].total;
+};
+
+const updateOrderTotal = async (order_id, total_price) => {
+  const SQL = `
+    UPDATE orders SET total_price = $2 WHERE id = $1
+  `;
+  await client.query(SQL, [order_id, total_price]);
 };
 
 // Review Product
@@ -476,4 +523,7 @@ module.exports = {
   createReview,
   deleteReview,
   clearCart,
+  createOrderItems,
+  updateOrderTotal,
+  calculateTotalPrice,
 };

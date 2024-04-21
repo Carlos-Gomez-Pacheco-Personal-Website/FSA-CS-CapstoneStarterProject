@@ -30,6 +30,9 @@ const {
   createReview,
   deleteReview,
   clearCart,
+  createOrderItems,
+  updateOrderTotal,
+  calculateTotalPrice,
 } = require("./db");
 
 const express = require("express");
@@ -189,17 +192,31 @@ app.delete("/api/users/:id/product/:productid", async (req, res, next) => {
     next(ex);
   }
 });
-
 app.post("/api/users/:id/checkout", async (req, res, next) => {
   try {
     const { id } = req.params;
-    const order = await checkout(id);
+    const { cart, address } = req.body;
+    const order = await checkout(id, address);
+    const orderItems = await createOrderItems(order.id, cart);
+    const totalPrice = await calculateTotalPrice(order.id);
+    await updateOrderTotal(order.id, totalPrice);
     await clearCart(id); // clear the cart after checkout
-    res.send(order);
+    res.send({ ...order, orderItems, totalPrice });
   } catch (ex) {
     next(ex);
   }
 });
+
+// app.post("/api/users/:id/checkout", async (req, res, next) => {
+//   try {
+//     const { id } = req.params;
+//     const order = await checkout(id);
+//     await clearCart(id); // clear the cart after checkout
+//     res.send(order);
+//   } catch (ex) {
+//     next(ex);
+//   }
+// });
 
 // app.post("/api/users/:id/checkout", async (req, res, next) => {
 //   try {
@@ -299,6 +316,7 @@ app.get("/api/users/:id/orders", async (req, res, next) => {
   try {
     const { id } = req.params;
     const orders = await fetchOrders(id);
+    console.log(orders); // Log the orders to inspect the structure
     res.send(orders);
   } catch (ex) {
     next(ex);

@@ -4,7 +4,7 @@ import { Container, Row, Col } from "react-bootstrap";
 
 const Orders = ({ orders }) => {
   return (
-    <Container>
+    <Container className="C-Container">
       <div
         style={{
           boxShadow: "0 4px 8px 0 rgba(0,0,0,0.2)",
@@ -32,9 +32,10 @@ const Orders = ({ orders }) => {
               }}
             >
               <p>
-                N°{index + 1} Order: {order.id} , {order.date}
+                N°{index + 1} Order: {order.id}
+                {/* {order.date} */}
               </p>
-              <p>Total: {order.total}</p>
+              {/* <p>Total: {order.total}</p> */}
             </Col>
           ))}
         </Row>

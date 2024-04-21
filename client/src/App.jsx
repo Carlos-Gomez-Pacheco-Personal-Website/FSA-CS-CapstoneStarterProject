@@ -213,13 +213,14 @@ function App() {
   };
 
   // Checkout items
-  const checkout = async () => {
+  const checkout = async (address) => {
     const response = await fetch(`/api/users/${auth.id}/checkout`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         authorization: window.localStorage.getItem("token"),
       },
+      body: JSON.stringify({ ...address, cart }),
     });
 
     const json = await response.json();
@@ -231,30 +232,6 @@ function App() {
       console.error("Checkout error", json);
     }
   };
-
-  // const checkout = async () => {
-  //   const response = await fetch(`/api/users/${auth.id}/checkout`, {
-  //     method: "POST",
-  //     body: JSON.stringify({
-  //       address,
-  //       cart,
-  //       totalPrice,
-  //     }),
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       authorization: window.localStorage.getItem("token"),
-  //     },
-  //   });
-
-  //   const json = await response.json();
-  //   if (response.ok) {
-  //     setCart([]);
-  //     setOrders([...orders, json]);
-  //     return true;
-  //   } else {
-  //     console.error("Checkout error", json);
-  //   }
-  // };
 
   // Fetch a Single Product
   const fetchProduct = async (id) => {
@@ -308,16 +285,7 @@ function App() {
             )}
           </Route>
           <Route path="/checkout">
-            {!auth.id ? (
-              <Redirect to="/login" />
-            ) : (
-              <Checkout
-                orders={orders}
-                // cart={cart}
-                // address={address}
-                // totalPrice={totalPrice}
-              />
-            )}
+            {!auth.id ? <Redirect to="/login" /> : <Checkout orders={orders} />}
           </Route>
           <Route path="/orders">
             {!auth.id ? <Redirect to="/login" /> : <Orders orders={orders} />}

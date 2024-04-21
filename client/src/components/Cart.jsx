@@ -13,24 +13,27 @@ const Cart = ({ cart, updateCart, checkout, removeFromCart, setCart }) => {
   const [zipCode, setZipCode] = useState("");
 
   const handleCheckout = async () => {
-    await checkout({
+    const response = await checkout({
       street,
       apartment,
       city,
       state,
       zipCode,
-    });
-    setCart([]); // clear the cart in the frontend
-    history.push("/checkout", {
-      address: {
-        street,
-        apartment,
-        city,
-        state,
-        zipCode,
-      },
       cart,
     });
+    if (response) {
+      setCart([]); // clear the cart in the frontend
+      history.push("/checkout", {
+        address: {
+          street,
+          apartment,
+          city,
+          state,
+          zipCode,
+        },
+        cart,
+      });
+    }
   };
 
   return (
