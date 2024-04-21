@@ -313,6 +313,13 @@ const checkout = async (user_id) => {
   return response.rows[0];
 };
 
+const clearCart = async (user_id) => {
+  const SQL = `
+    DELETE FROM cart WHERE user_id = $1
+  `;
+  await client.query(SQL, [user_id]);
+};
+
 // const checkout = async (user_id, address, totalPrice) => {
 //   const SQL = `
 //     INSERT INTO orders(id, user_id, order_date, street, apartment, city, state, zip_code, total_price)
@@ -468,4 +475,5 @@ module.exports = {
   getReviews,
   createReview,
   deleteReview,
+  clearCart,
 };

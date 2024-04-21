@@ -29,6 +29,7 @@ const {
   getReviews,
   createReview,
   deleteReview,
+  clearCart,
 } = require("./db");
 
 const express = require("express");
@@ -193,6 +194,7 @@ app.post("/api/users/:id/checkout", async (req, res, next) => {
   try {
     const { id } = req.params;
     const order = await checkout(id);
+    await clearCart(id); // clear the cart after checkout
     res.send(order);
   } catch (ex) {
     next(ex);

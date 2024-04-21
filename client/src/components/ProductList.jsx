@@ -51,7 +51,7 @@ const ProductList = ({
   }
 
   return (
-    <Container>
+    <Container className="C-Container">
       {/* <h1>Products</h1> */}
       <InputGroup className="m-3">
         <Dropdown onSelect={(e) => setSortKey(e)}>

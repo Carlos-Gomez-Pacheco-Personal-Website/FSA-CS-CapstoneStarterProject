@@ -21,8 +21,8 @@ function App() {
   const [cart, setCart] = useState([]);
   const [orders, setOrders] = useState([]);
   const [cartisLoading, setCartisLoading] = useState(false);
-  const [address, setAddress] = useState({});
-  const [totalPrice, setTotalPrice] = useState(0);
+  // const [address, setAddress] = useState({});
+  // const [totalPrice, setTotalPrice] = useState(0);
 
   // fetch Authentication
   useEffect(() => {
@@ -303,6 +303,7 @@ function App() {
                 updateCart={updateCart}
                 removeFromCart={removeFromCart}
                 checkout={checkout}
+                setCart={setCart}
               />
             )}
           </Route>
@@ -312,9 +313,9 @@ function App() {
             ) : (
               <Checkout
                 orders={orders}
-                cart={cart}
-                address={address}
-                totalPrice={totalPrice}
+                // cart={cart}
+                // address={address}
+                // totalPrice={totalPrice}
               />
             )}
           </Route>

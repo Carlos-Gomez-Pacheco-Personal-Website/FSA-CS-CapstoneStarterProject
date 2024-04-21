@@ -251,6 +251,10 @@ h3 {
   color: #333;
 }
 
+.C-Container {
+  margin-bottom: 96px;
+}
+
 @media (max-width: 1200px) {
   .product-list .card {
     flex: 0 0 calc(33.3333% - 20px);

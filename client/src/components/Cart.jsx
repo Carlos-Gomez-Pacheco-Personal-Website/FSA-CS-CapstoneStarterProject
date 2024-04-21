@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Link, useHistory } from "react-router-dom";
 import { useState } from "react";
 
-const Cart = ({ cart, updateCart, checkout, removeFromCart }) => {
+const Cart = ({ cart, updateCart, checkout, removeFromCart, setCart }) => {
   const history = useHistory();
 
   const [street, setStreet] = useState("");
@@ -20,10 +20,19 @@ const Cart = ({ cart, updateCart, checkout, removeFromCart }) => {
       state,
       zipCode,
     });
-    history.push(
-      "/checkout" //, {cart, products}
-    );
+    setCart([]); // clear the cart in the frontend
+    history.push("/checkout", {
+      address: {
+        street,
+        apartment,
+        city,
+        state,
+        zipCode,
+      },
+      cart,
+    });
   };
+
   return (
     <div className="cart">
       <h2>Cart</h2>

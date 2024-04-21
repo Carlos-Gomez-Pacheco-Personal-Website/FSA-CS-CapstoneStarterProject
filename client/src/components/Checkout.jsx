@@ -1,26 +1,41 @@
 // Checkout Component
 import PropTypes from "prop-types";
-// import { useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
-const Checkout = ({ orders, cart, address, totalPrice }) => {
-  // const location = useLocation();
-  // const {cart, products} = location
+const Checkout = ({ orders }) => {
+  const location = useLocation();
+  const { address, cart } = location.state || {};
+
+  const calculateTotalPrice = () => {
+    let total = 0;
+    cart.forEach((item) => {
+      total += item.price * item.quantity;
+    });
+    return total;
+  };
+
   return (
     <div>
-      <h2>Thank you for your purchase!</h2>
-      <p>Order Number: {orders.length}</p>
-      <p>
-        Shipping Address: {address.street}, {address.apartment}, {address.city},{" "}
-        {address.state}, {address.zipCode}
-      </p>
-      <p>Total Price: {totalPrice}</p>
-      {cart.map((item, index) => (
-        <div key={index}>
+      {address && cart ? (
+        <>
+          <h2>Thank you for your purchase!</h2>
+          <p>Order Number: {orders.length}</p>
           <p>
-            {item.name}: ${item.price} x {item.quantity}
+            Shipping Address: {address.street}, {address.apartment},{" "}
+            {address.city}, {address.state}, {address.zipCode}
           </p>
-        </div>
-      ))}
+          <p>Total Price: {calculateTotalPrice()}</p>
+          {cart.map((item, index) => (
+            <div key={index}>
+              <p>
+                {item.name}: ${item.price} x {item.quantity}
+              </p>
+            </div>
+          ))}
+        </>
+      ) : (
+        <p>No items in the cart.</p>
+      )}
     </div>
   );
 };
@@ -35,7 +50,6 @@ Checkout.propTypes = {
   }),
   cart: PropTypes.array,
   orders: PropTypes.array.isRequired,
-  totalPrice: PropTypes.any,
 };
 
 export default Checkout;
