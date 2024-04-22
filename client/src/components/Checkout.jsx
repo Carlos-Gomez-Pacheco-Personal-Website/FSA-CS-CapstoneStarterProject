@@ -1,6 +1,13 @@
 // Checkout Component
 import PropTypes from "prop-types";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
+import {
+  Container,
+  Card,
+  ListGroup,
+  ListGroupItem,
+  Button,
+} from "react-bootstrap";
 
 const Checkout = ({ orders }) => {
   const location = useLocation();
@@ -15,28 +22,37 @@ const Checkout = ({ orders }) => {
   };
 
   return (
-    <div>
+    <Container className="my-5">
       {address && cart ? (
-        <>
-          <h2>Thank you for your purchase!</h2>
-          <p>Order Number: {orders.length}</p>
-          <p>Total Price: {calculateTotalPrice()}</p>
-          <p>
-            Shipping Address: {address.street}, {address.apartment},{" "}
-            {address.city}, {address.state}, {address.zipCode}
-          </p>
-          {cart.map((item, index) => (
-            <div key={index}>
-              <p>
-                {item.name}: ${item.price} x {item.quantity}
-              </p>
-            </div>
-          ))}
-        </>
+        <Card className="text-center">
+          <Card.Header as="h2">Thank you for your purchase!</Card.Header>
+          <ListGroup variant="flush">
+            <ListGroupItem>Order Number: {orders.length + 1}</ListGroupItem>
+            <ListGroupItem>
+              Shipping Address: {address.street}, {address.apartment},{" "}
+              {address.city}, {address.state}, {address.zipCode}
+            </ListGroupItem>
+            {cart.map((item, index) => (
+              <ListGroupItem key={index + 1}>
+                {index + 1}. {item.name}: ${item.price} x {item.quantity}
+              </ListGroupItem>
+            ))}
+            <ListGroupItem>
+              Total Price: ${calculateTotalPrice().toFixed(2)}
+            </ListGroupItem>
+          </ListGroup>
+          <Card.Body>
+            <Card.Text>Your items will be shipped shortly.</Card.Text>
+            <Link to="/">
+              {" "}
+              <Button variant="success">Continue Shopping</Button>{" "}
+            </Link>
+          </Card.Body>
+        </Card>
       ) : (
         <p>No items in the cart.</p>
       )}
-    </div>
+    </Container>
   );
 };
 

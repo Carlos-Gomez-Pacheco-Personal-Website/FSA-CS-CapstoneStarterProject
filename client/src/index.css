@@ -204,6 +204,12 @@ li {
   margin-left: 10px;
 }
 
+.btn {
+  padding: 0.375rem 0.75rem; /* Smaller padding for a more refined look */
+  font-size: 0.875rem; /* Smaller font size for a more realistic look */
+  border-radius: 0.2rem; /* Slightly rounded corners for a modern appearance */
+}
+
 .btn-primary {
   background-color: blue;
   border-color: blue;
