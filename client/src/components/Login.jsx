@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
-import { Form, Button, Alert } from "react-bootstrap";
+import { Form, Button, Alert, CardTitle } from "react-bootstrap";
 
 // Login component
 const LoginRegister = ({ setAuth }) => {
@@ -76,8 +76,8 @@ const LoginRegister = ({ setAuth }) => {
     <div className="auth-form">
       {showLogin ? (
         <div>
-          <h2>Login</h2>
           <Form onSubmit={submitLogin}>
+            <CardTitle className="text-center">Login</CardTitle>
             <Form.Group controlId="formBasicEmail">
               <Form.Label>Username</Form.Label>
               <Form.Control
@@ -113,8 +113,8 @@ const LoginRegister = ({ setAuth }) => {
         </div>
       ) : (
         <div>
-          <h2>Register</h2>
           <Form onSubmit={submitRegister}>
+            <CardTitle className="text-center">Register</CardTitle>
             <Form.Group controlId="formBasicEmail">
               <Form.Label>Username</Form.Label>
               <Form.Control
