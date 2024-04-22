@@ -172,14 +172,6 @@ app.delete("/api/admin/products/:id", async (req, res, next) => {
 
 // For Cart
 
-// app.put("/api/cart/:id", async (req, res, next) => {
-//   try {
-//     res.send(await updateCart({ id: req.params.id, ...req.body }));
-//   } catch (ex) {
-//     next(ex);
-//   }
-// });
-
 app.delete("/api/users/:id/product/:productid", async (req, res, next) => {
   try {
     await removeFromCart({
@@ -205,28 +197,6 @@ app.post("/api/users/:id/checkout", async (req, res, next) => {
     next(ex);
   }
 });
-
-// app.post("/api/users/:id/checkout", async (req, res, next) => {
-//   try {
-//     const { id } = req.params;
-//     const order = await checkout(id);
-//     await clearCart(id); // clear the cart after checkout
-//     res.send(order);
-//   } catch (ex) {
-//     next(ex);
-//   }
-// });
-
-// app.post("/api/users/:id/checkout", async (req, res, next) => {
-//   try {
-//     const { id } = req.params;
-//     const { address, cart, totalPrice } = req.body;
-//     const order = await checkout(id, address, cart, totalPrice);
-//     res.send(order);
-//   } catch (ex) {
-//     next(ex);
-//   }
-// });
 
 app.post("/api/cart", async (req, res, next) => {
   try {
@@ -412,9 +382,18 @@ const init = async () => {
       name: "Chair",
       price: 70,
       quantity: 20,
-      description: "A wooden chair",
+      description: "A Gaming chair",
       image:
         "https://luxurylaunches.com/wp-content/uploads/2021/01/Razer-Gaming-Chair.jpg",
+      category_id: home.id,
+    }),
+    createProduct({
+      name: "TV",
+      price: 2000,
+      quantity: 15,
+      description: "100 inches OLED TV",
+      image:
+        "https://assets.hardwarezone.com/img/2023/01/OLED-EVO_Product_04.jpg",
       category_id: home.id,
     }),
   ]);

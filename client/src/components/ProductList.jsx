@@ -10,7 +10,7 @@ import {
   Container,
   Row,
   Col,
-  Form,
+  // Form,
 } from "react-bootstrap";
 
 const ProductList = ({
@@ -110,7 +110,7 @@ const ProductList = ({
                   <Card.Text>Price: ${product.price}</Card.Text>
                   {auth.id && (
                     <div>
-                      <Form.Group controlId="formBasicQuantity">
+                      {/* <Form.Group controlId="formBasicQuantity">
                         <Form.Label>Quantity</Form.Label>
                         <Form.Control type="number" min="1" defaultValue="1" />
                       </Form.Group>
@@ -122,7 +122,7 @@ const ProductList = ({
                           <option>L</option>
                           <option>XL</option>
                         </Form.Control>
-                      </Form.Group>
+                      </Form.Group> */}
                       {isAddedtoCart(product.id) ? (
                         <Button
                           variant="danger"
